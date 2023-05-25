@@ -1,4 +1,6 @@
-package dynamodb_actions
+package table_operations
+
+// Package to handle CRUD operations on DynamoDB table
 
 import (
     "context"
@@ -11,6 +13,12 @@ import (
 
 type Recipe struct {
     RecipeId int
+    RecipeName string
+    Cuisine string
+    Ingredients string
+    Instructions string
+    Source string
+    CookTime int
 }
 
 // Function that returns a boolean if specified DynamoDB table exists

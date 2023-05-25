@@ -1,51 +1,75 @@
-// package main
+package main
 
-// import (
-//     "fmt"
-//     "recipe_catalog/dynamodb"
-// )
 
-// func main() {
-//     fmt.Println(dynamodb_actions.CheckTable("Recipes"))
-//     recipe := dynamodb_actions.Recipe {
-//         RecipeId: 2,
-//         }
-//     dynamodb_actions.WriteItem(recipe)
-// }
+import (
+    "fmt"
+    "log"
+    "net/http"
+    "recipe_catalog/dynamodb"
+    "strconv"
+)
 
-// package main
+func formHandler(w http.ResponseWriter, r *http.Request) {
+    if err := r.ParseForm(); err != nil {
+        fmt.Fprintf(w, "ParseForm() err: %v", err)
+        return
+    }
 
-// // import the package we need to use
-// import (
-//   "fmt"
-//   "log"
-//   "net"
-//   "net/http"
-// )
+    recipeId, _ := strconv.Atoi(r.FormValue("recipeId"))
+	recipeName := r.FormValue("recipeName")
+	cuisine := r.FormValue("cuisine")
+	ingredients := r.FormValue("ingredients")
+	instructions := r.FormValue("instructions")
+	source := r.FormValue("source")
+	cookTime, _ := strconv.Atoi(r.FormValue("cookTime"))
 
-// func main() {
+    entry :=  table_operations.Recipe {
+        RecipeId: recipeId,
+        RecipeName: recipeName,
+        Cuisine: cuisine,
+        Ingredients: ingredients,
+        Instructions: instructions,
+        Source: source,
+        CookTime: cookTime, 
+        }
 
-//   // set a HTTP request handle function for path /greeting and registrate it
-//     http.HandleFunc("/greeting", func (w http.ResponseWriter, 
-//         r *http.Request) {
-  
-//         // when receive the request, print the greeting meassage
-//         fmt.Fprint(w, "Hello World")
-  
-//       })
+    table_operations.WriteItem(entry)
 
-//   // print out the server is going to start and show the time
-//   log.Println("Starting server....")
+    fmt.Fprintf(w, "POST request successful\n")
+    fmt.Fprintf(w, "Recipe ID = %v\n", recipeId)
+    fmt.Fprintf(w, "Recipe Name = %s\n", recipeName)
+    fmt.Fprintf(w, "Cuisine = %s\n", cuisine)
+    fmt.Fprintf(w, "Ingredients = %s\n", ingredients)
+    fmt.Fprintf(w, "Cooking Instructions = %s\n", instructions)
+    fmt.Fprintf(w, "Source = %s\n", source)
+    fmt.Fprintf(w, "Cook Time (min) = %v\n", cookTime)
+}
 
-//   // create server at localhost:8080 and using tcp as the network
-//   listener, err := net.Listen("tcp", ":8080")
+func helloHandler(w http.ResponseWriter, r *http.Request) {
+    if r.URL.Path != "/hello" {
+        http.Error(w, "404 not found.", http.StatusNotFound)
+        return
+    }
 
-//   // if recieve error, record it and exit the program
-//   if err != nil {
-//     log.Fatal(err)
-//   }
+    if r.Method != "GET" {
+        http.Error(w, "Method is not supported.", http.StatusNotFound)
+        return
+    }
 
-//   // setup HTTP connection for the listener of the server
-//   http.Serve(listener, nil)
 
-// }
+    fmt.Fprintf(w, "Hello!")
+}
+
+
+func main() {
+    fileServer := http.FileServer(http.Dir("./static"))
+    http.Handle("/", fileServer)
+    http.HandleFunc("/form", formHandler)
+    http.HandleFunc("/hello", helloHandler)
+
+
+    fmt.Printf("Starting server at port 8080\n")
+    if err := http.ListenAndServe(":8080", nil); err != nil {
+        log.Fatal(err)
+    }
+}
