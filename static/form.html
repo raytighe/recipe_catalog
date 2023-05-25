@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+</head>
+<body>
+<h1>Add a Recipe</h1>
+<div>
+  <form method="POST" action="/form">     
+      <label>Recipe ID</label> <br>
+      <input name="recipeId" type="number" value="" /> <br>
+      <br>
+      <label>Recipe Name</label> <br>
+      <input name="recipeName" type="text" value="" /> <br>
+      <br>
+      <label>Cuisine</label> <br>
+      <input name="cuisine" type="text" value="" /> <br>
+      <br>
+      <label>Ingredients</label> <br>
+      <textarea id="ingredients" name="ingredients" rows="10" cols="50"></textarea> <br>
+      <br>
+      <label>Cooking Instructions</label> <br> 
+      <textarea id="instructions" name="instructions" rows="10" cols="50"></textarea> <br>
+      <br>
+      <label>Source</label> <br>
+      <textarea id="source" name="source" rows="1" cols="50"> </textarea> <br>
+      <br>
+      <label>Cook Time (min) </label> <br> <input name="cookTime" type="number" value="" /> <br>
+      <br>
+      <input type="submit" value="submit" />
+  </form>
+</div>
+</body>
+</html>
