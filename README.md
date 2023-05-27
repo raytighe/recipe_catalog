@@ -1,7 +1,7 @@
 # Ray's Recipe Catalog
 ## A catalog of my favorite recipes
 
-Ray's Receipe Catalog is a Go application with a simple frontend to manage a catalog of recipes I like to cook.
+Ray's Receipe Catalog is a Go application using DynamoDB and a simple frontend to manage a catalog of recipes I like to cook.
 
 I build this webapp because I wanted to learn Go, get experience with DynamoDB and Terraform, and keep track of recipes I like to cook without ads.
 
