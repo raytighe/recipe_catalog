@@ -64,19 +64,17 @@ func WriteItem(r Recipe) {
 
     item, err := attributevalue.MarshalMap(r)
     svc := dynamodb.NewFromConfig(cfg)
-    out, err := svc.PutItem(context.TODO(), &dynamodb.PutItemInput{
+    _, errr := svc.PutItem(context.TODO(), &dynamodb.PutItemInput{
         TableName: aws.String("Recipes"),
         Item: item,
     })
 
     if err != nil {
-        panic(err)
+        panic(errr)
     }
-
-    fmt.Println(out.Attributes)
 }
 
-// Scan Dyanmodb items
+// Scan/query Dyanmodb items
 func ScanItems(r Recipe) []Recipe {
     cfg, err := config.LoadDefaultConfig(context.TODO(), func(o *config.LoadOptions) error {
         o.Region = "us-east-1"
@@ -92,6 +90,7 @@ func ScanItems(r Recipe) []Recipe {
         expression.And(
             expression.Contains(expression.Name("RecipeName"), r.RecipeName),
             expression.Contains(expression.Name("Cuisine"), r.Cuisine),
+            expression.Contains(expression.Name("Ingredients"), r.Ingredients),
         ),
     ).Build()
     if err != nil {

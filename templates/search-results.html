@@ -6,7 +6,7 @@
 <h1>Results</h1>
 <body>
 <p> {{range .}}
-    <b>{{.RecipeName}}</b> (Recipe ID: {{.RecipeId}}) <br>
+    <b>{{.RecipeName}}</b> (Recipe ID: {{.RecipeId}})<br>
     Cuisine: {{.Cuisine}} <br>
     Cook Time (min): {{.CookTime}} <br>
     <pre class="inner-pre" style="font-size: 16px; font-family:serif; white-space: pre-wrap;">Ingredients:<br>{{.Ingredients}}</pre>
@@ -15,6 +15,5 @@
     <br>
   {{end}}
 </p>
-</div>
 </body>
 </html>
