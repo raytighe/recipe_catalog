@@ -9,11 +9,12 @@ import (
     "github.com/aws/aws-sdk-go-v2/config"
     "github.com/aws/aws-sdk-go-v2/service/dynamodb"
     "github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
+    "github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 )
 
 type Recipe struct {
     RecipeId int
-    RecipeName string
+    RecipeName string `dynamodbav:"recipename"`
     Cuisine string
     Ingredients string
     Instructions string
@@ -51,6 +52,7 @@ func CheckTable(TableName string) bool {
     return false
 }
 
+// Writes a new item to the DynamoDB table
 func WriteItem(r Recipe) {
     cfg, err := config.LoadDefaultConfig(context.TODO(), func(o *config.LoadOptions) error {
         o.Region = "us-east-1"
@@ -72,4 +74,46 @@ func WriteItem(r Recipe) {
     }
 
     fmt.Println(out.Attributes)
+}
+
+// Scan Dyanmodb items
+func ScanItems(r Recipe) []Recipe {
+    cfg, err := config.LoadDefaultConfig(context.TODO(), func(o *config.LoadOptions) error {
+        o.Region = "us-east-1"
+        return nil
+    })
+    if err != nil {
+        panic(err)
+    }
+
+    svc := dynamodb.NewFromConfig(cfg)
+
+    expr, err := expression.NewBuilder().WithFilter(
+        expression.And(
+            expression.Contains(expression.Name("RecipeName"), r.RecipeName),
+            expression.Contains(expression.Name("Cuisine"), r.Cuisine),
+        ),
+    ).Build()
+    if err != nil {
+        panic(err)
+    }
+
+    out_raw, err := svc.Scan(context.TODO(), &dynamodb.ScanInput{
+        TableName:                 aws.String("Recipes"),
+        FilterExpression:          expr.Filter(),
+        ExpressionAttributeNames:  expr.Names(),
+        ExpressionAttributeValues: expr.Values(),
+    })
+    if err != nil {
+        panic(err)
+    }
+
+    // Unmarshals *dynamodb.ScanOutput to list of structs
+    var out []Recipe
+    err_unmarshal := attributevalue.UnmarshalListOfMaps(out_raw.Items, &out)
+    if err_unmarshal != nil {
+        fmt.Printf("Failed to unmarshal Items, %w", err_unmarshal)
+    }
+
+    return out
 }
