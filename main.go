@@ -5,6 +5,8 @@ import (
     "fmt"
     "log"
     "net/http"
+    "html/template"
+    "path"
     "recipe_catalog/dynamodb"
     "strconv"
 )
@@ -35,19 +37,29 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 
     // Query Dynamodb and display results
     if r.Method == "GET" {
-        fmt.Fprintf(w, "Search Results\n-------------------\n",)
+        //fmt.Fprintf(w, "Search Results\n-------------------\n",)
         response := table_operations.ScanItems(entry)
-        for _, r := range response {
-        fmt.Fprintf(w, "Recipe ID: %v\n", r.RecipeId)
-        fmt.Fprintf(w, "Recipe Name: %s\n", r.RecipeName)
-        fmt.Fprintf(w, "Cuisine: %s\n", r.Cuisine)
-        fmt.Fprintf(w, "Ingredients:\n %s\n", r.Ingredients)
-        fmt.Fprintf(w, "Cooking Instructions:\n %s\n", r.Instructions)
-        fmt.Fprintf(w, "Source: %s\n", r.Source)
-        fmt.Fprintf(w, "Cook Time (min): %v\n", r.CookTime)
-        fmt.Fprintf(w, "-------------------\n",)
+        // for _, r := range response {
+        // fmt.Fprintf(w, "Recipe ID: %v\n", r.RecipeId)
+        // fmt.Fprintf(w, "Recipe Name: %s\n", r.RecipeName)
+        // fmt.Fprintf(w, "Cuisine: %s\n", r.Cuisine)
+        // fmt.Fprintf(w, "Ingredients:\n %s\n", r.Ingredients)
+        // fmt.Fprintf(w, "Cooking Instructions:\n %s\n", r.Instructions)
+        // fmt.Fprintf(w, "Source: %s\n", r.Source)
+        // fmt.Fprintf(w, "Cook Time (min): %v\n", r.CookTime)
+        // fmt.Fprintf(w, "-------------------\n",)
+        // }
+        // fmt.Fprintf(w, "\n%v recipes returned", len(response))
+        fp := path.Join("templates", "search-results.html")
+        tmpl, err := template.ParseFiles(fp)
+        if err != nil {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
         }
-        fmt.Fprintf(w, "\n%v recipes returned", len(response))
+
+        if err := tmpl.Execute(w, response); err != nil {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+        }
 
 
     // Insert record in Dynamodb

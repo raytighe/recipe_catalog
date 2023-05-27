@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+</head>
+<h1>Results</h1>
+<body>
+<p> {{range .}}
+    <b>{{.RecipeName}}</b> (Recipe ID: {{.RecipeId}}) <br>
+    Cuisine: {{.Cuisine}} <br>
+    Cook Time (min): {{.CookTime}} <br>
+    <pre class="inner-pre" style="font-size: 16px; font-family:serif; white-space: pre-wrap;">Ingredients:<br>{{.Ingredients}}</pre>
+    <pre class="inner-pre" style="font-size: 16px; font-family:serif; white-space: pre-wrap;">Instructions:<br>{{.Instructions}}</pre>
+    Source: {{.Source}} <br>
+    <br>
+  {{end}}
+</p>
+</div>
+</body>
+</html>

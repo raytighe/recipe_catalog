@@ -14,7 +14,7 @@ import (
 
 type Recipe struct {
     RecipeId int
-    RecipeName string `dynamodbav:"recipename"`
+    RecipeName string
     Cuisine string
     Ingredients string
     Instructions string
