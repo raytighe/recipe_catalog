@@ -22,7 +22,3 @@ Add recipes with all available information. In this case, I'm adding a simple sc
 ## Search Recipes
 Search by keyword within each respective field. Search results are the intersection of multiple keyword results. For example, searching for "Eggs" by recipe name will return all recipes with eggs in the title. Searching by "Asian" cuisine and "chicken" in the ingredients will return all Asian recipes that require chicken. 
 ![](https://github.com/raytighe/recipe_catalog/blob/main/img/search.gif)
-
-## Update Recipes
-
-## Installation
