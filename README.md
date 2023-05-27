@@ -16,27 +16,13 @@ I build this webapp because I wanted to learn Go, get experience with DynamoDB a
 - Search for what you're in the mood for by name, cuisine, and ingredient list
 
 ## Add a Recipe
+Add recipes with all available information. In this case, I'm adding a simple scrambled eggs recipes from foodnetwork.com.
 ![](https://github.com/raytighe/recipe_catalog/blob/main/img/add-recipe.gif)
 
 ## Search Recipes
+Search by keyword within each respective field. Search results are the intersection of multiple keyword results. For example, searching for "Eggs" by recipe name will return all recipes with eggs in the title. Searching by "Asian" cuisine and "chicken" in the ingredients will return all Asian recipes that require chicken. 
+![](https://github.com/raytighe/recipe_catalog/blob/main/img/search.gif)
 
 ## Update Recipes
 
 ## Installation
-
-Dillinger requires [Node.js](https://nodejs.org/) v10+ to run.
-
-Install the dependencies and devDependencies and start the server.
-
-```sh
-cd dillinger
-npm i
-node app
-```
-
-For production environments...
-
-```sh
-npm install --production
-NODE_ENV=production node app
-```
